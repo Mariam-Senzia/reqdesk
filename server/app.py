@@ -61,6 +61,34 @@ class RequestResource(Resource):
             print(e)
             return make_response(jsonify({"message": "Failed to create request"}), 500)
 
+    def get(self):
+        try:
+            requests = Request.query.all()
+
+            return make_response(
+                jsonify(
+                    [
+                        {
+                            "id": req.id,
+                            "name": req.name,
+                            "email": req.email,
+                            "company": req.company,
+                            "request_type": req.request_type,
+                            "priority": req.priority,
+                            "message": req.message,
+                            "status": req.status,
+                            "created_at": req.created_at.isoformat(),
+                        }
+                        for req in requests
+                    ]
+                ),
+                200,
+            )
+
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"message": "error getting requests"}), 500)
+
 
 api.add_resource(RequestResource, "/api/v1/requests")
 
