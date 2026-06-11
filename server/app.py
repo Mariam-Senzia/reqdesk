@@ -89,8 +89,29 @@ class RequestResource(Resource):
             print(e)
             return make_response(jsonify({"message": "error getting requests"}), 500)
 
+    def patch(self, id):
+        try:
+            req = Request.query.filter_by(id=id).first()
 
-api.add_resource(RequestResource, "/api/v1/requests")
+            if not req:
+                return make_response(jsonify({"message": "Request not found"}), 404)
+
+            form_data = request.get_json()
+
+            req.status = form_data.get("status")
+
+            db.session.commit()
+
+            return make_response(
+                jsonify({"message": "Status updated successfully"}), 200
+            )
+
+        except Exception as e:
+            print(e)
+            return make_response(jsonify({"message": "Failed to update status"}), 500)
+
+
+api.add_resource(RequestResource, "/api/v1/requests", "/api/v1/requests/<int:id>")
 
 
 if __name__ == "__main__":
