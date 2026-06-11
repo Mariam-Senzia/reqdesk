@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 flask = "*"
+datetime = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
 
