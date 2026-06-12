@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import Navbar from "../components/home/Navbar";
+import Requestform from "../components/home/Hero";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
         minH="100vh"
       >
         <Navbar />
+        <Requestform />
       </Box>
     </>
   );
