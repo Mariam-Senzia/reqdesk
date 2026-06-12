@@ -1,5 +1,7 @@
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Container,
@@ -17,8 +19,51 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
+import { useState } from "react";
 
 const Hero = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    request_type: "",
+    priority: "",
+    message: "",
+  });
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(formData);
+
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 2000);
+
+    setTimeout(() => {
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        request_type: "",
+        priority: "",
+        message: "",
+      });
+      setIsVisible(false);
+    }, 5000);
+  };
+
   return (
     <>
       <Container maxW="container.xl">
@@ -116,6 +161,10 @@ const Hero = () => {
               padding={{ base: "20px", md: "30px" }}
               borderRadius="10px"
               boxShadow="0px 4px 20px rgba(0, 0, 0, 0.08)"
+              onSubmit={handleSubmit}
+              sx={{
+                ".chakra-form__required-indicator": { color: "#111827" },
+              }}
             >
               <Heading size="md" color="#111827" marginBottom="4px">
                 Let's hear from you
@@ -124,21 +173,44 @@ const Hero = () => {
                 Submit your request and our team will review and respond
                 promptly.
               </Text>
-              <FormControl marginBottom="20px">
+              <FormControl isRequired marginBottom="20px">
                 <FormLabel>Name</FormLabel>
-                <Input placeholder="Enter your full name" />
+                <Input
+                  type="text"
+                  placeholder="Enter your full name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
               </FormControl>
-              <FormControl marginBottom="20px">
+              <FormControl isRequired marginBottom="20px">
                 <FormLabel>Email</FormLabel>
-                <Input placeholder="example@mail.com" />
+                <Input
+                  type="email"
+                  placeholder="example@mail.com"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
               </FormControl>
-              <FormControl marginBottom="20px">
+              <FormControl isRequired marginBottom="20px">
                 <FormLabel>Company</FormLabel>
-                <Input placeholder="ABC Ltd" />
+                <Input
+                  type="text"
+                  placeholder="ABC Ltd"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                />
               </FormControl>
-              <FormControl marginBottom="20px">
+              <FormControl isRequired marginBottom="20px">
                 <FormLabel>Request Type</FormLabel>
-                <Select placeholder="Select request type">
+                <Select
+                  placeholder="Select request type"
+                  name="request_type"
+                  value={formData.request_type}
+                  onChange={handleInputChange}
+                >
                   <option value="Bug">Bug</option>
                   <option value="Feature Request">Feature Request</option>
                   <option value="General Feedback">General Feedback</option>
@@ -146,9 +218,14 @@ const Hero = () => {
                   <option value="Other">Other</option>
                 </Select>
               </FormControl>
-              <FormControl marginBottom="20px">
+              <FormControl isRequired marginBottom="20px">
                 <FormLabel>Priority</FormLabel>
-                <RadioGroup>
+                <RadioGroup
+                  value={formData.priority}
+                  onChange={(value) => {
+                    setFormData({ ...formData, priority: value });
+                  }}
+                >
                   <HStack spacing="24px">
                     <Radio colorScheme="green" value="Low">
                       Low
@@ -162,12 +239,18 @@ const Hero = () => {
                   </HStack>
                 </RadioGroup>
               </FormControl>
-              <FormControl marginBottom="25px">
+              <FormControl isRequired marginBottom="25px">
                 <FormLabel>Message</FormLabel>
-                <Textarea></Textarea>
+                <Textarea
+                  placeholder="Enter your message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                ></Textarea>
               </FormControl>
 
               <Button
+                type="submit"
                 bg="#2563eb"
                 color="#fff"
                 _hover={{ bg: "#1d4ed8" }}
@@ -178,6 +261,14 @@ const Hero = () => {
             </Box>
           </Box>
         </Box>
+
+        {isVisible && (
+          <Box position="fixed" bottom="20px" left="20px" zIndex={10}>
+            <Alert status="success">
+              <AlertIcon /> Your request was submitted successfully
+            </Alert>
+          </Box>
+        )}
       </Container>
     </>
   );
