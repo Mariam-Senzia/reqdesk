@@ -24,18 +24,40 @@ const Hero = () => {
       <Container maxW="container.xl">
         <Box
           minH="90vh"
-          display="flex"
+          display={{ base: "", lg: "flex" }}
           justifyContent="space-between"
           alignItems="center"
+          py={{ base: "35px", lg: "0" }}
         >
-          <Box flex={1} alignSelf="center">
-            <Heading size="2xl" color="#1f2937" width="80%">
+          <Box
+            flex={1}
+            alignSelf="center"
+            display="flex"
+            flexDirection="column"
+            alignItems={{ base: "flex-start", md: "center", lg: "flex-start" }}
+            textAlign={{ base: "left", md: "center", lg: "left" }}
+          >
+            <Heading
+              size="2xl"
+              color="#1f2937"
+              width={{ base: "100%", lg: "80%" }}
+            >
               Submit requests.
             </Heading>
-            <Heading size="2xl" color="#1f2937" marginBottom="15px" width="80%">
+            <Heading
+              size="2xl"
+              color="#1f2937"
+              marginBottom="15px"
+              width={{ base: "100%", lg: "80%" }}
+            >
               Manage with ease.
             </Heading>
-            <Text marginBottom="30px" fontSize="lg" color="#1f2937" width="70%">
+            <Text
+              marginBottom="30px"
+              fontSize="lg"
+              color="#1f2937"
+              width={{ base: "100%", md: "80%", lg: "70%" }}
+            >
               Reqdesk gives users a simple way to submit requests and gives
               admins the tools to track, prioritize and resolve them all in one
               place.
@@ -81,15 +103,19 @@ const Hero = () => {
             </HStack>
           </Box>
 
-          <Box flex={1} display="flex" justifyContent="flex-end">
-            <form
-              style={{
-                backgroundColor: "#fff",
-                width: "80%",
-                padding: "30px",
-                borderRadius: "10px",
-                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.08)",
-              }}
+          <Box
+            flex={1}
+            display="flex"
+            justifyContent={{ base: "", md: "center", lg: "flex-end" }}
+            marginTop={{ base: "35px", lg: "0" }}
+          >
+            <Box
+              as="form"
+              bg="#ffffff"
+              width={{ base: "100%", md: "80%" }}
+              padding={{ base: "20px", md: "30px" }}
+              borderRadius="10px"
+              boxShadow="0px 4px 20px rgba(0, 0, 0, 0.08)"
             >
               <Heading size="md" color="#111827" marginBottom="4px">
                 Let's hear from you
@@ -149,7 +175,7 @@ const Hero = () => {
               >
                 Submit Request
               </Button>
-            </form>
+            </Box>
           </Box>
         </Box>
       </Container>

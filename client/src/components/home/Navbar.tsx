@@ -14,7 +14,7 @@ const Navbar = () => {
             <Image
               src="/logos/Reqdesk Logo - no bg.png"
               alt="reqdesk logo"
-              height={{ base: "10vh", md: "7vh", lg: "7vh" }}
+              height={{ base: "8vh", md: "6vh", lg: "7vh" }}
             />
           </Box>
           <Box>
