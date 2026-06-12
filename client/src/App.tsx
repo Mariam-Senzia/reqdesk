@@ -1,11 +1,11 @@
-import "./App.css";
-import { ChakraProvider, Text } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <>
       <ChakraProvider>
-        <Text>Hello</Text>
+        <Home />
       </ChakraProvider>
     </>
   );

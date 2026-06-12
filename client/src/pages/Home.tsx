@@ -1,0 +1,20 @@
+import { Box } from "@chakra-ui/react";
+import Navbar from "../components/home/Navbar";
+
+const Home = () => {
+  return (
+    <>
+      <Box
+        bgGradient={{
+          base: "linear(180deg, #e8f0fe, #dbeafe, #eff6ff)",
+          lg: "linear(135deg, #e8f0fe, #dbeafe, #eff6ff)",
+        }}
+        minH="100vh"
+      >
+        <Navbar />
+      </Box>
+    </>
+  );
+};
+
+export default Home;
