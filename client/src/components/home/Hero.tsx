@@ -45,23 +45,34 @@ const Hero = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
 
-    setTimeout(() => {
-      setIsVisible(true);
-    }, 2000);
-
-    setTimeout(() => {
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        request_type: "",
-        priority: "",
-        message: "",
+    fetch("http://127.0.0.1:5000/api/v1/requests", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...formData }),
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        console.log(data);
+        setIsVisible(true);
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          request_type: "",
+          priority: "",
+          message: "",
+        });
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 2500);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Something went wrong, please try again.");
       });
-      setIsVisible(false);
-    }, 5000);
   };
 
   return (

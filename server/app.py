@@ -3,6 +3,7 @@ from models.init import db
 from models.request import Request
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from flask_cors import CORS
 
 app = Flask(__name__)
 
@@ -12,6 +13,7 @@ app.config["SQLALCHEMY_TRACK_NOTIFICATION"] = False
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
+CORS(app)
 
 
 class RequestResource(Resource):
