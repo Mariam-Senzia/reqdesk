@@ -23,7 +23,7 @@ const Hero = () => {
     <>
       <Container maxW="container.xl">
         <Box
-          minH="85vh"
+          minH="90vh"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
