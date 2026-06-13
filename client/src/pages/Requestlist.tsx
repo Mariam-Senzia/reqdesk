@@ -1,5 +1,7 @@
 import {
+  Badge,
   Box,
+  Button,
   Container,
   Heading,
   Table,
@@ -12,8 +14,18 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import Navbar from "../components/home/Navbar";
+import { useEffect, useState } from "react";
 
 const Requestlist = () => {
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/api/v1/requests")
+      .then((resp) => resp.json())
+      .then((data) => setRequests(data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -38,27 +50,66 @@ const Requestlist = () => {
               <Table variant="simple">
                 <Thead bg="#f1f5f9">
                   <Tr>
-                    <Th>To convert</Th>
-                    <Th>into</Th>
-                    <Th isNumeric>multiply by</Th>
+                    <Th>USER NAME</Th>
+                    <Th>USER EMAIL</Th>
+                    <Th>COMPANY</Th>
+                    <Th>REQUEST TYPE</Th>
+                    <Th>PRIORITY</Th>
+                    <Th>MESSAGE</Th>
+                    <Th>STATUS</Th>
+                    <Th>ACTION</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td>inches</Td>
-                    <Td>millimetres (mm)</Td>
-                    <Td isNumeric>25.4</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>feet</Td>
-                    <Td>centimetres (cm)</Td>
-                    <Td isNumeric>30.48</Td>
-                  </Tr>
-                  <Tr>
-                    <Td>yards</Td>
-                    <Td>metres (m)</Td>
-                    <Td isNumeric>0.91444</Td>
-                  </Tr>
+                  {requests.map((req, index) => {
+                    const priorityColor = {
+                      Low: "green",
+                      Medium: "yellow",
+                      High: "red",
+                    };
+
+                    const statusColor = {
+                      New: "blue",
+                      "In Review": "purple",
+                      Resolved: "green",
+                      Rejected: "red",
+                    };
+                    return (
+                      <Tr key={index}>
+                        <Td>{req.name}</Td>
+                        <Td>{req.email}</Td>
+
+                        <Td>{req.company}</Td>
+                        <Td>{req.request_type}</Td>
+                        <Td>
+                          <Badge colorScheme={priorityColor[req.priority]}>
+                            {req.priority}
+                          </Badge>
+                        </Td>
+                        <Td maxW="300px" isTruncated>
+                          {req.message}
+                        </Td>
+                        <Td>
+                          <Badge
+                            variant="outline"
+                            colorScheme={statusColor[req.status]}
+                          >
+                            {req.status}
+                          </Badge>
+                        </Td>
+                        <Td>
+                          <Button
+                            bg="#2563eb"
+                            color="#fff"
+                            _hover={{ bg: "#1d4ed8" }}
+                            transition="all 0.3s ease"
+                          >
+                            Manage Request
+                          </Button>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
             </TableContainer>
