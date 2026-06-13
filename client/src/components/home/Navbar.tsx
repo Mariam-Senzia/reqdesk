@@ -1,4 +1,4 @@
-import { Box, Button, Container, Image } from "@chakra-ui/react";
+import { Box, Button, Container, Image, Link } from "@chakra-ui/react";
 
 const Navbar = () => {
   return (
@@ -18,14 +18,16 @@ const Navbar = () => {
             />
           </Box>
           <Box>
-            <Button
-              bg="#2563eb"
-              color="#fff"
-              _hover={{ bg: "#1d4ed8" }}
-              transition="all 0.3s ease"
-            >
-              View Requests
-            </Button>
+            <Link href="/requestlist">
+              <Button
+                bg="#2563eb"
+                color="#fff"
+                _hover={{ bg: "#1d4ed8" }}
+                transition="all 0.3s ease"
+              >
+                View Requests
+              </Button>
+            </Link>
           </Box>
         </Box>
       </Container>
