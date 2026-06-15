@@ -10,8 +10,10 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  FormLabel,
   HStack,
   Heading,
+  Select,
   Skeleton,
   Table,
   TableContainer,
@@ -33,6 +35,7 @@ const Requestlist = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [newStatus, SetNewStatus] = useState("");
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/v1/requests")
@@ -55,6 +58,11 @@ const Requestlist = () => {
     "In Review": "purple",
     Resolved: "green",
     Rejected: "red",
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(newStatus);
   };
 
   return (
@@ -233,9 +241,9 @@ const Requestlist = () => {
                       Priority
                     </Heading>
                     <Badge
-                      colorScheme={priorityColor[selectedRequest.priority]}
+                      colorScheme={priorityColor[selectedRequest?.priority]}
                     >
-                      {selectedRequest.priority}
+                      {selectedRequest?.priority}
                     </Badge>
                   </HStack>
                   <Divider borderColor="#cbd5e1" />
@@ -259,6 +267,30 @@ const Requestlist = () => {
                       {selectedRequest?.status}
                     </Badge>
                   </HStack>
+                  <Box as="form" onSubmit={handleSubmit}>
+                    <FormLabel>Update Status</FormLabel>
+                    <HStack pb={6}>
+                      <Select
+                        value={newStatus}
+                        onChange={(e) => SetNewStatus(e.target.value)}
+                      >
+                        <option value="New">New</option>
+                        <option value="In Review">In Review</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="Rejected">Rejected</option>
+                      </Select>
+                      <Button
+                        type="submit"
+                        bg="#2563eb"
+                        color="#fff"
+                        _hover={{ bg: "#1d4ed8" }}
+                        transition="all 0.3s ease"
+                      >
+                        Update
+                      </Button>
+                    </HStack>
+                  </Box>
+
                   <Divider borderColor="#cbd5e1" />
 
                   <HStack justifyContent="space-between" py={5}>
@@ -283,7 +315,6 @@ const Requestlist = () => {
                 <Button variant="outline" mr={3} onClick={onClose}>
                   Cancel
                 </Button>
-                <Button colorScheme="blue">Save</Button>
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
