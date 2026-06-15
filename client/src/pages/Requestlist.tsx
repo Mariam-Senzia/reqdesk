@@ -2,6 +2,15 @@ import {
   Badge,
   Box,
   Button,
+  Divider,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  HStack,
   Heading,
   Skeleton,
   Table,
@@ -13,13 +22,17 @@ import {
   Thead,
   Tr,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminNavbar from "../components/reuestlist/AdminNavbar";
 
 const Requestlist = () => {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef(null);
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/v1/requests")
@@ -30,6 +43,19 @@ const Requestlist = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const priorityColor = {
+    Low: "green",
+    Medium: "yellow",
+    High: "red",
+  };
+
+  const statusColor = {
+    New: "blue",
+    "In Review": "purple",
+    Resolved: "green",
+    Rejected: "red",
+  };
 
   return (
     <>
@@ -99,18 +125,6 @@ const Requestlist = () => {
                         );
                       })
                   : requests.map((req, index) => {
-                      const priorityColor = {
-                        Low: "green",
-                        Medium: "yellow",
-                        High: "red",
-                      };
-
-                      const statusColor = {
-                        New: "blue",
-                        "In Review": "purple",
-                        Resolved: "green",
-                        Rejected: "red",
-                      };
                       return (
                         <Tr key={index} color="#64748b">
                           <Td>
@@ -119,7 +133,6 @@ const Requestlist = () => {
                               <Text>{req.email}</Text>
                             </VStack>
                           </Td>
-
                           <Td>{req.company}</Td>
                           <Td>{req.request_type}</Td>
                           <Td>
@@ -154,6 +167,10 @@ const Requestlist = () => {
                               color="#fff"
                               _hover={{ bg: "#1d4ed8" }}
                               transition="all 0.3s ease"
+                              ref={btnRef}
+                              onClick={() => {
+                                setSelectedRequest(req), onOpen();
+                              }}
                             >
                               Manage Request
                             </Button>
@@ -164,6 +181,112 @@ const Requestlist = () => {
               </Tbody>
             </Table>
           </TableContainer>
+        </Box>
+
+        <Box>
+          <Drawer
+            isOpen={isOpen}
+            placement="right"
+            onClose={onClose}
+            finalFocusRef={btnRef}
+          >
+            <DrawerOverlay />
+            <DrawerContent>
+              <DrawerCloseButton />
+              <DrawerHeader>Request details</DrawerHeader>
+
+              <DrawerBody>
+                <Box>
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Name
+                    </Heading>
+                    <Text color="#374151">{selectedRequest?.name}</Text>
+                  </HStack>
+                  <Divider borderColor="#cbd5e1" />
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Email
+                    </Heading>
+                    <Text color="#374151">{selectedRequest?.email}</Text>
+                  </HStack>
+                  <Divider borderColor="#cbd5e1" />
+
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Company
+                    </Heading>
+                    <Text color="#374151">{selectedRequest?.company}</Text>
+                  </HStack>
+                  <Divider borderColor="#cbd5e1" />
+
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Request type
+                    </Heading>
+                    <Text>{selectedRequest?.request_type}</Text>
+                  </HStack>
+                  <Divider borderColor="#cbd5e1" />
+
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Priority
+                    </Heading>
+                    <Badge
+                      colorScheme={priorityColor[selectedRequest.priority]}
+                    >
+                      {selectedRequest.priority}
+                    </Badge>
+                  </HStack>
+                  <Divider borderColor="#cbd5e1" />
+
+                  <VStack alignItems="left" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Message
+                    </Heading>
+                    <Text>{selectedRequest?.message}</Text>
+                  </VStack>
+                  <Divider borderColor="#cbd5e1" />
+
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Status
+                    </Heading>
+                    <Badge
+                      variant="outline"
+                      colorScheme={statusColor[selectedRequest?.status]}
+                    >
+                      {selectedRequest?.status}
+                    </Badge>
+                  </HStack>
+                  <Divider borderColor="#cbd5e1" />
+
+                  <HStack justifyContent="space-between" py={5}>
+                    <Heading size="sm" color="#374151">
+                      Date
+                    </Heading>
+                    <Text>
+                      {new Date(selectedRequest?.created_at).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }
+                      )}
+                    </Text>
+                  </HStack>
+                </Box>
+              </DrawerBody>
+
+              <DrawerFooter>
+                <Button variant="outline" mr={3} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button colorScheme="blue">Save</Button>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
         </Box>
       </Box>
     </>
