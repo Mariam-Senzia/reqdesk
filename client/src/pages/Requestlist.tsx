@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Badge,
   Box,
   Button,
@@ -36,6 +38,7 @@ const Requestlist = () => {
   const btnRef = React.useRef(null);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [newStatus, SetNewStatus] = useState("");
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/v1/requests")
@@ -62,7 +65,28 @@ const Requestlist = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(newStatus);
+    fetch(`http://127.0.0.1:5000/api/v1/requests/${selectedRequest.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then((resp) => resp.json())
+      .then(() => {
+        setIsVisible(true);
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 2500);
+        onClose();
+        fetch("http://127.0.0.1:5000/api/v1/requests")
+          .then((resp) => resp.json())
+          .then((data) => setRequests(data));
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Something went wrong, please try again.");
+      });
   };
 
   return (
@@ -319,6 +343,14 @@ const Requestlist = () => {
             </DrawerContent>
           </Drawer>
         </Box>
+
+        {isVisible && (
+          <Box position="fixed" bottom="20px" left="20px" zIndex={999}>
+            <Alert status="success">
+              <AlertIcon /> Your request was updated successfully
+            </Alert>
+          </Box>
+        )}
       </Box>
     </>
   );
