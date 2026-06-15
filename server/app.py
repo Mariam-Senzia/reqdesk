@@ -65,7 +65,7 @@ class RequestResource(Resource):
 
     def get(self):
         try:
-            requests = Request.query.all()
+            requests = Request.query.order_by(Request.id.desc()).all()
 
             return make_response(
                 jsonify(
