@@ -221,6 +221,7 @@ const Requestlist = () => {
             placement="right"
             onClose={onClose}
             finalFocusRef={btnRef}
+            size={{ base: "full", md: "sm" }}
           >
             <DrawerOverlay />
             <DrawerContent>
