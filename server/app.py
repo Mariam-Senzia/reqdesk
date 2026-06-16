@@ -4,10 +4,15 @@ from models.request import Request
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
+load_dotenv()
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+
 app.config["SQLALCHEMY_TRACK_NOTIFICATION"] = False
 
 db.init_app(app)

@@ -1,8 +1,8 @@
-"""Initial migration
+"""initial migration
 
-Revision ID: a44253a9dde8
+Revision ID: 1996e26e8cbc
 Revises: 
-Create Date: 2026-06-11 15:47:52.026116
+Create Date: 2026-06-16 13:34:27.970985
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a44253a9dde8'
+revision = '1996e26e8cbc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,10 +23,10 @@ def upgrade():
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('company', sa.String(length=100), nullable=False),
-    sa.Column('request_type', sa.Enum('Bug', 'Feature Request', 'General Feedback', 'Partnership', 'Other'), nullable=False),
-    sa.Column('priority', sa.Enum('Low', 'Medium', 'High'), nullable=False),
+    sa.Column('request_type', sa.Enum('Bug', 'Feature Request', 'General Feedback', 'Partnership', 'Other', name='request_type_enum'), nullable=False),
+    sa.Column('priority', sa.Enum('Low', 'Medium', 'High', name='priority_enum'), nullable=False),
     sa.Column('message', sa.Text(), nullable=False),
-    sa.Column('status', sa.Enum('New', 'In Review', 'Resolved', 'Rejected'), nullable=False),
+    sa.Column('status', sa.Enum('New', 'In Review', 'Resolved', 'Rejected', name='status_enum'), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )

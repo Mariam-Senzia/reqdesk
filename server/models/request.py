@@ -10,13 +10,22 @@ class Request(db.Model):
     email = db.Column(db.String(120), nullable=False)
     company = db.Column(db.String(100), nullable=False)
     request_type = db.Column(
-        db.Enum("Bug", "Feature Request", "General Feedback", "Partnership", "Other"),
+        db.Enum(
+            "Bug",
+            "Feature Request",
+            "General Feedback",
+            "Partnership",
+            "Other",
+            name="request_type_enum",
+        ),
         nullable=False,
     )
-    priority = db.Column(db.Enum("Low", "Medium", "High"), nullable=False)
+    priority = db.Column(
+        db.Enum("Low", "Medium", "High", name="priority_enum"), nullable=False
+    )
     message = db.Column(db.Text, nullable=False)
     status = db.Column(
-        db.Enum("New", "In Review", "Resolved", "Rejected"),
+        db.Enum("New", "In Review", "Resolved", "Rejected", name="status_enum"),
         default="New",
         nullable=False,
     )
