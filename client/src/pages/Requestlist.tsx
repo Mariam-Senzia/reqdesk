@@ -15,6 +15,7 @@ import {
   FormLabel,
   HStack,
   Heading,
+  Input,
   Select,
   Skeleton,
   Table,
@@ -42,6 +43,8 @@ const Requestlist = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [pin, setPin] = useState("");
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/v1/requests")
@@ -98,6 +101,60 @@ const Requestlist = () => {
       (priorityFilter === "" || req.priority === priorityFilter)
     );
   });
+
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pin === "1234") {
+      setIsAuthenticated(true);
+    } else {
+      alert(" Incorrect Pin");
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <Box
+        minH="100vh"
+        display="flex"
+        alignItems="flex-start"
+        pt={"25vh"}
+        justifyContent="center"
+        bgGradient={{
+          base: "linear(180deg, #e8f0fe, #dbeafe, #eff6ff)",
+          lg: "linear(135deg, #e8f0fe, #dbeafe, #eff6ff)",
+        }}
+      >
+        <Box
+          as="form"
+          onSubmit={handlePinSubmit}
+          bg="#fff"
+          p={8}
+          borderRadius="10px"
+          boxShadow="0px 4px 20px rgba(0,0,0,0.06)"
+        >
+          <Heading size="md" mb={4}>
+            Admin access
+          </Heading>
+          <Input
+            type="password"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            placeholder="Enter PIN"
+            mb={4}
+          />
+          <Button
+            type="submit"
+            bg="#2563eb"
+            color="#fff"
+            _hover={{ bg: "#1d4ed8" }}
+            width="100%"
+          >
+            Continue
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <>
