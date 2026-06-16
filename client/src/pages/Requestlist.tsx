@@ -30,6 +30,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import AdminNavbar from "../components/reuestlist/AdminNavbar";
+import { FaSlidersH } from "react-icons/fa";
 
 const Requestlist = () => {
   const [requests, setRequests] = useState([]);
@@ -39,6 +40,8 @@ const Requestlist = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [newStatus, SetNewStatus] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [priorityFilter, setPriorityFilter] = useState("");
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/v1/requests")
@@ -89,6 +92,13 @@ const Requestlist = () => {
       });
   };
 
+  const filteredRequests = requests.filter((req) => {
+    return (
+      (statusFilter === "" || req.status === statusFilter) &&
+      (priorityFilter === "" || req.priority === priorityFilter)
+    );
+  });
+
   return (
     <>
       <AdminNavbar />
@@ -100,6 +110,49 @@ const Requestlist = () => {
           <Text color="#64748b">
             Manage and update incoming requests from the dashboard.
           </Text>
+        </Box>
+
+        <Box marginBottom="20px">
+          <HStack>
+            <HStack color="#2563eb" pr={3}>
+              <FaSlidersH />
+              <Text fontWeight="500">Filters</Text>
+            </HStack>
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              placeholder="Status"
+              maxW="200px"
+              color="#64748b"
+            >
+              <option value="New">New</option>
+              <option value="In Review">In Review</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Rejected">Rejected</option>
+            </Select>
+            <Select
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              placeholder="Priority"
+              maxW="200px"
+              color="#64748b"
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </Select>
+            <Button
+              variant="outline"
+              color="#64748b"
+              fontWeight="500"
+              onClick={() => {
+                setStatusFilter("");
+                setPriorityFilter("");
+              }}
+            >
+              All Requests
+            </Button>
+          </HStack>
         </Box>
 
         <Box>
@@ -123,40 +176,42 @@ const Requestlist = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {isLoading
-                  ? Array(5)
-                      .fill(0)
-                      .map((_, index) => {
-                        return (
-                          <Tr key={index}>
-                            <Td>
-                              <Skeleton height="40px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                            <Td>
-                              <Skeleton height="20px" />
-                            </Td>
-                          </Tr>
-                        );
-                      })
-                  : requests.map((req, index) => {
+                {isLoading ? (
+                  Array(5)
+                    .fill(0)
+                    .map((_, index) => {
+                      return (
+                        <Tr key={index}>
+                          <Td>
+                            <Skeleton height="40px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                          <Td>
+                            <Skeleton height="20px" />
+                          </Td>
+                        </Tr>
+                      );
+                    })
+                ) : (
+                  <>
+                    {filteredRequests.map((req, index) => {
                       return (
                         <Tr key={index} color="#64748b">
                           <Td>
@@ -210,6 +265,20 @@ const Requestlist = () => {
                         </Tr>
                       );
                     })}
+                    {filteredRequests.length === 0 && (
+                      <Tr>
+                        <Td
+                          colSpan={8}
+                          textAlign="center"
+                          py={8}
+                          color="#94a3b8"
+                        >
+                          No requests found matching your filters.
+                        </Td>
+                      </Tr>
+                    )}
+                  </>
+                )}
               </Tbody>
             </Table>
           </TableContainer>
