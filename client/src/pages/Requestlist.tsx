@@ -33,13 +33,25 @@ import React, { useEffect, useState } from "react";
 import AdminNavbar from "../components/reuestlist/AdminNavbar";
 import { FaSlidersH } from "react-icons/fa";
 
+type Request = {
+  id: number;
+  name: string;
+  email: string;
+  company: string;
+  request_type: string;
+  priority: "Low" | "Medium" | "High";
+  status: "New" | "In Review" | "Resolved" | "Rejected";
+  message: string;
+  created_at: string;
+};
+
 const Requestlist = () => {
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<Request[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef(null);
-  const [selectedRequest, setSelectedRequest] = useState(null);
-  const [newStatus, SetNewStatus] = useState("");
+  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [newStatus, SetNewStatus] = useState<Request["status"] | "">("");
   const [isVisible, setIsVisible] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
@@ -58,13 +70,13 @@ const Requestlist = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const priorityColor = {
+  const priorityColor: Record<Request["priority"], string> = {
     Low: "green",
     Medium: "yellow",
     High: "red",
   };
 
-  const statusColor = {
+  const statusColor: Record<Request["status"], string> = {
     New: "blue",
     "In Review": "purple",
     Resolved: "green",
