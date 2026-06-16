@@ -43,7 +43,9 @@ const Requestlist = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
   const [priorityFilter, setPriorityFilter] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAdmin") === "true"
+  );
   const [pin, setPin] = useState("");
 
   useEffect(() => {
@@ -106,6 +108,7 @@ const Requestlist = () => {
     e.preventDefault();
     if (pin === "1234") {
       setIsAuthenticated(true);
+      localStorage.setItem("isAdmin", "true");
     } else {
       alert(" Incorrect Pin");
     }
