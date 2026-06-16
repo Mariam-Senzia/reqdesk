@@ -31,6 +31,7 @@ const Hero = () => {
     message: "",
   });
   const [isVisible, setIsVisible] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -45,8 +46,9 @@ const Hero = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    fetch("http://127.0.0.1:5000/api/v1/requests", {
+    fetch("https://reqdesk.onrender.com/api/v1/requests", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -266,6 +268,8 @@ const Hero = () => {
                 color="#fff"
                 _hover={{ bg: "#1d4ed8" }}
                 width="100%"
+                isLoading={isSubmitting}
+                loadingText={"Submitting.."}
               >
                 Submit Request
               </Button>

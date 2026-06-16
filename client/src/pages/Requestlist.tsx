@@ -49,7 +49,7 @@ const Requestlist = () => {
   const [pin, setPin] = useState("");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/v1/requests")
+    fetch("https://reqdesk.onrender.com/api/v1/requests")
       .then((resp) => resp.json())
       .then((data) => {
         setRequests(data);
@@ -73,21 +73,25 @@ const Requestlist = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch(`http://127.0.0.1:5000/api/v1/requests/${selectedRequest.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status: newStatus }),
-    })
+    fetch(
+      `https://reqdesk.onrender.com/api/v1/requests/${selectedRequest.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      }
+    )
       .then((resp) => resp.json())
       .then(() => {
         setIsVisible(true);
         setTimeout(() => {
           setIsVisible(false);
+          SetNewStatus("");
         }, 2500);
         onClose();
-        fetch("http://127.0.0.1:5000/api/v1/requests")
+        fetch("https://reqdesk.onrender.com/api/v1/requests")
           .then((resp) => resp.json())
           .then((data) => setRequests(data));
       })
