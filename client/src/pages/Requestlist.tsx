@@ -117,7 +117,8 @@ const Requestlist = () => {
         minH="100vh"
         display="flex"
         alignItems="flex-start"
-        pt={"25vh"}
+        pt={{ base: "30vh", md: "25vh" }}
+        px={{ base: 5, md: 0 }}
         justifyContent="center"
         bgGradient={{
           base: "linear(180deg, #e8f0fe, #dbeafe, #eff6ff)",
