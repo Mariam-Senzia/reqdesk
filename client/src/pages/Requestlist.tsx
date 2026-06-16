@@ -85,6 +85,9 @@ const Requestlist = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!selectedRequest) return;
+
     fetch(
       `https://reqdesk.onrender.com/api/v1/requests/${selectedRequest.id}`,
       {
@@ -411,11 +414,13 @@ const Requestlist = () => {
                     <Heading size="sm" color="#374151">
                       Priority
                     </Heading>
-                    <Badge
-                      colorScheme={priorityColor[selectedRequest?.priority]}
-                    >
-                      {selectedRequest?.priority}
-                    </Badge>
+                    {selectedRequest && (
+                      <Badge
+                        colorScheme={priorityColor[selectedRequest.priority]}
+                      >
+                        {selectedRequest.priority}
+                      </Badge>
+                    )}
                   </HStack>
                   <Divider borderColor="#cbd5e1" />
 
@@ -431,19 +436,23 @@ const Requestlist = () => {
                     <Heading size="sm" color="#374151">
                       Status
                     </Heading>
-                    <Badge
-                      variant="outline"
-                      colorScheme={statusColor[selectedRequest?.status]}
-                    >
-                      {selectedRequest?.status}
-                    </Badge>
+                    {selectedRequest && (
+                      <Badge
+                        variant="outline"
+                        colorScheme={statusColor[selectedRequest.status]}
+                      >
+                        {selectedRequest.status}
+                      </Badge>
+                    )}
                   </HStack>
                   <Box as="form" onSubmit={handleSubmit}>
                     <FormLabel>Update Status</FormLabel>
                     <HStack pb={6}>
                       <Select
                         value={newStatus}
-                        onChange={(e) => SetNewStatus(e.target.value)}
+                        onChange={(e) =>
+                          SetNewStatus(e.target.value as Request["status"])
+                        }
                       >
                         <option value="New">New</option>
                         <option value="In Review">In Review</option>
@@ -468,16 +477,17 @@ const Requestlist = () => {
                     <Heading size="sm" color="#374151">
                       Date
                     </Heading>
-                    <Text>
-                      {new Date(selectedRequest?.created_at).toLocaleDateString(
-                        "en-GB",
-                        {
+                    {selectedRequest && (
+                      <Text>
+                        {new Date(
+                          selectedRequest?.created_at
+                        ).toLocaleDateString("en-GB", {
                           day: "numeric",
                           month: "long",
                           year: "numeric",
-                        }
-                      )}
-                    </Text>
+                        })}
+                      </Text>
+                    )}
                   </HStack>
                 </Box>
               </DrawerBody>
