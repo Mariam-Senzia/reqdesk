@@ -18,6 +18,7 @@ import {
   Input,
   Select,
   Skeleton,
+  Stack,
   Table,
   TableContainer,
   Tbody,
@@ -193,46 +194,49 @@ const Requestlist = () => {
         </Box>
 
         <Box marginBottom="20px">
-          <HStack>
-            <HStack color="#2563eb" pr={3}>
+          <Stack direction={{ base: "column", md: "row" }} spacing={4}>
+            <HStack color="#2563eb">
               <FaSlidersH />
               <Text fontWeight="500">Filters</Text>
             </HStack>
-            <Select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              placeholder="Status"
-              maxW="200px"
-              color="#64748b"
-            >
-              <option value="New">New</option>
-              <option value="In Review">In Review</option>
-              <option value="Resolved">Resolved</option>
-              <option value="Rejected">Rejected</option>
-            </Select>
-            <Select
-              value={priorityFilter}
-              onChange={(e) => setPriorityFilter(e.target.value)}
-              placeholder="Priority"
-              maxW="200px"
-              color="#64748b"
-            >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </Select>
-            <Button
-              variant="outline"
-              color="#64748b"
-              fontWeight="500"
-              onClick={() => {
-                setStatusFilter("");
-                setPriorityFilter("");
-              }}
-            >
-              All Requests
-            </Button>
-          </HStack>
+            <HStack spacing={3}>
+              <Select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                placeholder="Status"
+                maxW={{ base: "120px", md: "200px" }}
+                color="#64748b"
+              >
+                <option value="New">New</option>
+                <option value="In Review">In Review</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Rejected">Rejected</option>
+              </Select>
+              <Select
+                value={priorityFilter}
+                onChange={(e) => setPriorityFilter(e.target.value)}
+                placeholder="Priority"
+                maxW={{ base: "120px", md: "200px" }}
+                color="#64748b"
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </Select>
+              <Button
+                variant="outline"
+                color="#64748b"
+                fontWeight="500"
+                width="100%"
+                onClick={() => {
+                  setStatusFilter("");
+                  setPriorityFilter("");
+                }}
+              >
+                All Requests
+              </Button>
+            </HStack>
+          </Stack>
         </Box>
 
         <Box>
@@ -251,7 +255,7 @@ const Requestlist = () => {
                   <Th>PRIORITY</Th>
                   <Th>MESSAGE</Th>
                   <Th>STATUS</Th>
-                  <Th>DATE</Th>
+                  {/* <Th>DATE</Th> */}
                   <Th>ACTION</Th>
                 </Tr>
               </Thead>
@@ -283,9 +287,9 @@ const Requestlist = () => {
                           <Td>
                             <Skeleton height="20px" />
                           </Td>
-                          <Td>
+                          {/* <Td>
                             <Skeleton height="20px" />
-                          </Td>
+                          </Td> */}
                         </Tr>
                       );
                     })
@@ -318,7 +322,7 @@ const Requestlist = () => {
                               {req.status}
                             </Badge>
                           </Td>
-                          <Td>
+                          {/* <Td>
                             {new Date(req.created_at).toLocaleDateString(
                               "en-GB",
                               {
@@ -327,7 +331,7 @@ const Requestlist = () => {
                                 year: "numeric",
                               }
                             )}
-                          </Td>
+                          </Td> */}
                           <Td>
                             <Button
                               bg="#2563eb"

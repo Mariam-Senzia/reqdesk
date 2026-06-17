@@ -74,6 +74,9 @@ const Hero = () => {
       .catch((err) => {
         console.log(err);
         alert("Something went wrong, please try again.");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
