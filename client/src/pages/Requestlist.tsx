@@ -60,6 +60,7 @@ const Requestlist = () => {
     localStorage.getItem("isAdmin") === "true"
   );
   const [pin, setPin] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     fetch("https://reqdesk.onrender.com/api/v1/requests")
@@ -89,6 +90,8 @@ const Requestlist = () => {
 
     if (!selectedRequest) return;
 
+    setIsUpdating(true);
+
     fetch(
       `https://reqdesk.onrender.com/api/v1/requests/${selectedRequest.id}`,
       {
@@ -114,6 +117,9 @@ const Requestlist = () => {
       .catch((err) => {
         console.log(err);
         alert("Something went wrong, please try again.");
+      })
+      .finally(() => {
+        setIsUpdating(false);
       });
   };
 
@@ -469,6 +475,8 @@ const Requestlist = () => {
                         color="#fff"
                         _hover={{ bg: "#1d4ed8" }}
                         transition="all 0.3s ease"
+                        isLoading={isUpdating}
+                        loadingText="Updating..."
                       >
                         Update
                       </Button>
