@@ -65,5 +65,6 @@ After debugging, I found that idle database connections were being closed and la
 
 ## What I'd improve with more time
 
+- Move pagination and filtering to the backend so the database only returns the data needed for the current page for better scalability
 - Add proper role-based authentication so admins log in with real credentials instead of a shared PIN.
 - Add email notifications,to confirm a request was received and to notify admins of new submissions.
