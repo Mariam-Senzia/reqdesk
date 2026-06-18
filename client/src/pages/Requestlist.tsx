@@ -33,6 +33,7 @@ import {
 import React, { useEffect, useState } from "react";
 import AdminNavbar from "../components/reuestlist/AdminNavbar";
 import { FaSlidersH } from "react-icons/fa";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
 type Request = {
   id: number;
@@ -61,6 +62,7 @@ const Requestlist = () => {
   );
   const [pin, setPin] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     fetch("https://reqdesk.onrender.com/api/v1/requests")
@@ -129,6 +131,18 @@ const Requestlist = () => {
       (priorityFilter === "" || req.priority === priorityFilter)
     );
   });
+
+  const requestsPerPage = 8;
+  const totalPages = Math.ceil(filteredRequests.length / requestsPerPage);
+
+  const paginatedRequests = filteredRequests.slice(
+    (currentPage - 1) * requestsPerPage,
+    currentPage * requestsPerPage
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [statusFilter, priorityFilter]);
 
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -301,7 +315,7 @@ const Requestlist = () => {
                     })
                 ) : (
                   <>
-                    {filteredRequests.map((req, index) => {
+                    {paginatedRequests.map((req, index) => {
                       return (
                         <Tr key={index} color="#64748b">
                           <Td>
@@ -372,6 +386,51 @@ const Requestlist = () => {
               </Tbody>
             </Table>
           </TableContainer>
+        </Box>
+
+        <Box display="flex" justifyContent="center" pt={3}>
+          <HStack spacing={2}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              isDisabled={currentPage === 1}
+            >
+              {<ChevronLeftIcon />}
+            </Button>
+            {Array(totalPages)
+              .fill(0)
+              .map((_, index) => {
+                const page = index + 1;
+                return (
+                  <Button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    bg={currentPage === page ? "#2563eb" : "transparent"}
+                    _hover={{
+                      backgroundColor:
+                        currentPage === page ? "#1d4ed8" : "transparent",
+                    }}
+                    color={currentPage === page ? "#fff" : "#64748b"}
+                    variant={currentPage === page ? "solid" : "outline"}
+                    size="sm"
+                  >
+                    {page}
+                  </Button>
+                );
+              })}
+
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              isDisabled={currentPage === totalPages}
+            >
+              <ChevronRightIcon />
+            </Button>
+          </HStack>
         </Box>
 
         <Box>
