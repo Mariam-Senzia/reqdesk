@@ -203,8 +203,8 @@ const Requestlist = () => {
   return (
     <>
       <AdminNavbar />
-      <Box py={4} px={{ base: 4, md: 6, lg: 10 }}>
-        <Box marginBottom="30px">
+      <Box py={3} px={{ base: 4, md: 6, lg: 10 }}>
+        <Box marginBottom="20px">
           <Heading color="#1f2937" size="lg">
             Request List
           </Heading>
